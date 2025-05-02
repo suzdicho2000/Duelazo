@@ -40,6 +40,7 @@ export const createPurchasesController = async (req, res) => {
       }
     }
     const data = await generateApiSignature();
+    console.log('data signature', data);
     const transactionId = 'txn_ref_' + Date.now();
     const requestBody = {
       customer: {
@@ -79,7 +80,7 @@ export const createPurchasesController = async (req, res) => {
       'x-idempotency-key': data.x_idempotency_key,
       'x-signature': data.x_signature,
     };
-
+    console.log('----------prueba--------\n');
     const response = await axios.post(data.apiUrl, requestBody, { headers });
     const fecha = new Date().toLocaleDateString('es-MX', {
       timeZone: 'America/Mexico_City',
