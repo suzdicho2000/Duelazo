@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function generateApiSignature() {
   const idempotencyKeyForThisRequest = uuidv4();
-  console.log(process.env.TEST_API_KEY);
-  console.log(process.env.API_SECRET);
+  // console.log(process.env.TEST_API_KEY);
+  // console.log(process.env.API_SECRET);
   const message = process.env.TEST_API_KEY + idempotencyKeyForThisRequest;
   const key = process.env.API_SECRET;
   const hash = CryptoJS.HmacSHA256(message, key);

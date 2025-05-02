@@ -40,7 +40,6 @@ export const createPurchasesController = async (req, res) => {
       }
     }
     const data = await generateApiSignature();
-    console.log('data signature', data);
     const transactionId = 'txn_ref_' + Date.now();
     const requestBody = {
       customer: {
