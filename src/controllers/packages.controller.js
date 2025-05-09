@@ -4,6 +4,7 @@ import { generateApiSignature } from '../services/interSect/interSectSignature.j
 import { getPackageByReference } from './packages.utils.js';
 import { createTransaction } from '../services/google/utilsGoogle.js';
 const sheetTransactions = process.env.TRANSACTIONS;
+const callBackUrl = process.env.CALLBACK_URL;
 export const createPurchasesController = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -29,6 +30,7 @@ export const createPurchasesController = async (req, res) => {
       postalCode,
       ipAddress,
       amount,
+      returnUrl,
     } = req.body;
     let valuePlan;
     if (planReferenceId === 'Free' && amount) {
@@ -70,8 +72,8 @@ export const createPurchasesController = async (req, res) => {
       transactionReferenceId: transactionId,
       ip: ipAddress,
       notes: null,
-      callBackUrl: null,
-      returnUrl: 'https://prazoom.com/paquetes',
+      callBackUrl,
+      returnUrl,
     };
     const headers = {
       'Content-Type': 'application/json',
@@ -117,6 +119,19 @@ export const createPurchasesController = async (req, res) => {
     console.log('Cuerpo de la respuesta:', response.data);
     console.log('---------------------------\n');
     return res.send(response.data);
+  } catch (error) {
+    console.error('Error en la respuesta:', error.response.status);
+    console.error('Datos del error:', error.response.data);
+    return res.status(400).json({ errors: 'Ha ocurrido un error al intentar crear la transaccion' });
+  }
+};
+
+export const webhhook = async (req, res) => {
+  try {
+    console.log('Webhook recibido de Intersect Banking');
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    res.sendStatus(200);
   } catch (error) {
     console.error('Error en la respuesta:', error.response.status);
     console.error('Datos del error:', error.response.data);
