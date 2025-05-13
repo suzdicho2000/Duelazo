@@ -280,8 +280,6 @@ export const webhhook = async (req, res) => {
 
 export const getTransaction = async (req, res) => {
   try {
-    console.log('Webhook recibido de Intersect Banking');
-    console.log('Headers:', req.headers);
     console.log('Body:', req.params.id);
     const data = await generateApiSignature();
     const headers = {
@@ -290,7 +288,19 @@ export const getTransaction = async (req, res) => {
       'x-signature': data.x_signature,
     };
     const response = await axios.get(`${data.apiUrl}/${req.params.id}`, { headers });
-    res.send(response.data);
+    console.log('---------------------------\n');
+    console.log(`Status HTTP: ${response.status}`);
+    console.log('Cuerpo de la respuesta:', response.data);
+    console.log('---------------------------\n');
+    let responseData = response.data;
+    const fecha = new Date().toLocaleDateString('es-MX', {
+      timeZone: 'America/Mexico_City',
+    });
+    const hora = new Date().toLocaleTimeString('es-MX', {
+      timeZone: 'America/Mexico_City',
+    });
+    responseData = { ...responseData, time: `${fecha} - ${hora}` };
+    res.send(responseData);
   } catch (error) {
     console.error('Error en la respuesta:', error.response.status);
     console.error('Datos del error:', error.response.data);
