@@ -2,7 +2,6 @@ import { google } from 'googleapis';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const sheetPackages = process.env.PACKAGES;
 // const sheetTransactions = process.env.TRANSACTIONS;
 
 // const auth = new google.auth.GoogleAuth({
@@ -26,8 +25,8 @@ export async function dataCell(rango) {
   return rows;
 }
 
-export async function readPackages() {
-  const rangoTotal = `${sheetPackages}!A2:C100`;
+export async function readPackages(sheet) {
+  const rangoTotal = `${sheet}!A2:C100`;
   try {
     const rows = await dataCell(rangoTotal);
     return rows;
@@ -36,16 +35,11 @@ export async function readPackages() {
   }
 }
 
-export async function findCell(arraydata, value, valMesa) {
+export async function findCell(arraydata, value, sheet) {
   if (arraydata && arraydata.length > 0) {
     for (let i = 0; i < arraydata.length; i++) {
       if (arraydata[i][0] === value.toString()) {
-        if (valMesa == true) {
-          const cellAddress = [`${sheetPackages}!B${i + 2}`, `${sheetPackages}!C${i + 2}`];
-
-          return cellAddress;
-        }
-        const cellAddress = `${sheetPackages}!A${i + 2}:F${i + 2}`;
+        const cellAddress = `${sheet}!A${i + 2}:F${i + 2}`;
         return cellAddress;
       }
     }

@@ -42,7 +42,7 @@ export const validateTransaction = [
     .isLength({ max: 15 })
     .withMessage('phoneNumber no puede exceder los 15 caracteres'),
 
-  body('planReferenceId').notEmpty().withMessage('planReferenceId no puede estar vacío').isString().withMessage('planReferenceId debe ser un string'),
+  body('sheet').notEmpty().withMessage('sheet no puede estar vacío').isString().withMessage('sheet debe ser un string'),
   // .isIn(['Enterprise', 'Business', 'Professional', 'Esencial', 'Free'])
   // .withMessage('planReferenceId debe ser uno de los valores permitidos: Enterprise, Business, Professional, Esencial, Free'),
 
@@ -154,5 +154,5 @@ export const validateTransaction = [
     .isIP()
     .withMessage('ipAddress debe ser una dirección IP válida (IPv4 o IPv6)'),
 
-  body('amount').optional().isFloat({ gt: 0 }).withMessage('amount debe ser un número decimal mayor que 0'),
+  body('data').exists().withMessage('data es obligatorio').isArray({ min: 1 }).withMessage('data debe ser un array con al menos un elemento'),
 ];
